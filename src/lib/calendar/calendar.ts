@@ -7,7 +7,6 @@ function createCalendarStore() {
 	// --- 1. 내부 상태를 관리하는 비공개(private) 스토어들 ---
 	const viewDate = writable(new TZDate());
 	const currentView = writable<'week' | 'day'>('week');
-	const timeFormat = writable<'12h' | '24h'>('12h');
 	const isMobile = writable(false);
 
 	// --- 2. UI에 필요한 상태를 계산하는 파생(derived) 스토어들 ---
@@ -44,13 +43,12 @@ function createCalendarStore() {
 	// --- 3. 컴포넌트에서 사용할 모든 상태 값을 하나의 객체로 묶는 최종 파생 스토어 ---
 	// 이 스토어의 .subscribe 메소드를 외부로 노출할 것입니다.
 	const store = derived(
-		[displayedDates, headerTitle, currentView, timeFormat],
-		([$displayedDates, $headerTitle, $currentView, $timeFormat]) => {
+		[displayedDates, headerTitle, currentView],
+		([$displayedDates, $headerTitle, $currentView]) => {
 			return {
 				displayedDates: $displayedDates,
 				headerTitle: $headerTitle,
 				currentView: $currentView,
-				timeFormat: $timeFormat
 			};
 		}
 	);
@@ -72,7 +70,6 @@ function createCalendarStore() {
 		subscribe: store.subscribe, // Svelte가 구독할 수 있도록 .subscribe를 노출
 		navigate,
 		setView: currentView.set,
-		setTimeFormat: timeFormat.set,
 		setIsMobile: isMobile.set
 	};
 }

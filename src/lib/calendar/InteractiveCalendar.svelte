@@ -89,10 +89,6 @@
 				<button on:click={() => calendar.setView('day')} class="px-2 py-1 rounded" class:bg-white={$calendar.currentView === 'day'} class:shadow-sm={$calendar.currentView === 'day'}>하루</button>
 				<button on:click={() => calendar.setView('week')} class="px-2 py-1 rounded" class:bg-white={$calendar.currentView === 'week'} class:shadow-sm={$calendar.currentView === 'week'}>일주일</button>
 			</div>
-			<div class="flex rounded-md bg-slate-100 p-0.5 text-xs">
-				<button on:click={() => calendar.setTimeFormat('12h')} class="px-2 py-1 rounded" class:bg-white={$calendar.timeFormat === '12h'} class:shadow-sm={$calendar.timeFormat === '12h'}>12시간</button>
-				<button on:click={() => calendar.setTimeFormat('24h')} class="px-2 py-1 rounded" class:bg-white={$calendar.timeFormat === '24h'} class:shadow-sm={$calendar.timeFormat === '24h'}>24시간</button>
-			</div>
 		</div>
 	</div>
 
@@ -124,7 +120,7 @@
 					<div class="relative text-right" style="height: {CELL_HEIGHT * 4}px">
 						{#if i > 0}
 							<span class="absolute -top-2 left-2 pr-2 text-xs text-slate-400">
-								{format(new Date(2000, 0, 1, i), $calendar.timeFormat === '12h' ? 'ha' : 'HH:mm')}
+								{format(new Date(2000, 0, 1, i), 'ha')}
 							</span>
 						{/if}
 					</div>

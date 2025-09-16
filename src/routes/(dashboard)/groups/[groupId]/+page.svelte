@@ -28,22 +28,28 @@
 		<TabsContent value="schedule" class="mt-4">
 			<Card>
 				<CardHeader>
-					<CardTitle>예정된 일정</CardTitle>
+					<CardTitle>그룹 일정</CardTitle>
 				</CardHeader>
-				<CardContent class="space-y-4">
+				<CardContent class="space-y-2">
 					{#if events.length > 0}
 						{#each events as event (event.id)}
-							<div class="flex items-center justify-between">
+							<div class="flex items-center justify-between rounded-lg border p-4">
 								<div>
 									<p class="font-semibold">{event.title}</p>
-									<p class="text-sm text-slate-600">{event.date.toLocaleDateString()} &middot; {event.time}</p>
+									{#if event.status === '확정'}
+										<p class="text-sm text-slate-600">{event.date.toLocaleDateString()} &middot; {event.time}</p>
+									{:else}
+										<p class="text-sm text-yellow-600">멤버들의 시간을 조율하고 있어요.</p>
+									{/if}
 								</div>
-								<span class="rounded-full px-2 py-0.5 text-xs"
-											class:bg-blue-100={event.status === '확정'}
-											class:text-blue-800={event.status === '확정'}
-											class:bg-yellow-100={event.status === '조율중'}
-											class:text-yellow-800={event.status === '조율중'}
-								>{event.status}</span>
+
+								{#if event.status === '확정'}
+							<span class="rounded-full bg-blue-100 px-3 py-1 text-xs font-medium text-blue-800">
+								✅ 확정됨
+							</span>
+								{:else if event.status === '조율중'}
+									<Button size="sm" href="/poll/{event.id}">투표 참여 →</Button>
+								{/if}
 							</div>
 						{/each}
 					{:else}
