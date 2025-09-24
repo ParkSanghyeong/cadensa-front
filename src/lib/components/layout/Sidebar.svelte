@@ -1,75 +1,169 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import authStore from '$lib/stores/authStore';
-	import { Button } from '$lib/components/ui/button';
 	import { goto } from '$app/navigation';
-	import SidebarLink from '$lib/components/layout/SidebarLink.svelte';
-	import { LayoutDashboard, CalendarDays, Users, LogOut, PlusCircle } from '@lucide/svelte';
+	import { onMount } from 'svelte';
 
-	// --- 데이터 로딩 (실제 앱에서는 API 호출) ---
-	import { mockGroups } from '$lib/data/mockGroups';
-
-	// 고정 네비게이션 링크
-	const mainLinks = [
-		{ href: '/dashboard', label: '대시보드', icon: LayoutDashboard },
-		{ href: '/schedule', label: '내 스케줄', icon: CalendarDays }
+	const navItems = [
+		{
+			href: '/dashboard',
+			label: 'DASHBOARD',
+			desc: 'OVERVIEW'
+		},
+		{
+			href: '/calendar',
+			label: 'CALENDAR',
+			desc: 'SCHEDULE'
+		},
+		{
+			href: '/groups',
+			label: 'GROUPS',
+			desc: 'TEAMS'
+		}
 	];
+
+	let currentTime = new Date();
+	let mounted = false;
+
+	// Enhanced active state detection
+	$: isActiveRoute = (href: string) => {
+		if (href === '/dashboard') {
+			return $page.url.pathname === href;
+		}
+		return $page.url.pathname.startsWith(href);
+	};
 
 	function handleLogout() {
 		authStore.set({ isLoggedIn: false, user: null });
 		goto('/');
 	}
+
+	function getTimeString() {
+		return currentTime.toLocaleTimeString('en-US', {
+			hour12: false,
+			hour: '2-digit',
+			minute: '2-digit'
+		});
+	}
+
+	function getDateString() {
+		return currentTime.toLocaleDateString('en-US', {
+			year: 'numeric',
+			month: '2-digit',
+			day: '2-digit'
+		}).replace(/\//g, '.');
+	}
+
+	onMount(() => {
+		mounted = true;
+		const timer = setInterval(() => {
+			currentTime = new Date();
+		}, 1000);
+
+		return () => clearInterval(timer);
+	});
 </script>
 
-<aside class="flex h-screen w-64 flex-col border-r bg-white">
-	<div class="border-b p-4">
-		<a href="/" class="text-2xl font-bold text-slate-900">Cadensa</a>
-	</div>
+{#if mounted}
+	<aside
+		class="flex h-screen w-80 flex-col bg-background border-r-2 border-foreground relative"
+		role="navigation"
+		aria-label="Main navigation"
+	>
+		<!-- ASCII Art Header -->
+		<div class="border-b-2 border-foreground bg-card p-6">
 
-	<nav class="p-4">
-		{#each mainLinks as link}
-			<SidebarLink href={link.href} label={link.label} icon={link.icon} />
-		{/each}
-	</nav>
+			<div class="space-y-2">
+				<pre class="font-mono text-xs text-foreground leading-tight">
+╔═══════════════════════════╗
+║       C A D E N S A       ║
+╚═══════════════════════════╝</pre>
+				<div class="font-mono text-xs text-muted-foreground">
+					<div class="flex justify-between">
+						<span>DATE: {getDateString()}</span>
+						<span class="cursor">TIME: {getTimeString()}</span>
+					</div>
+				</div>
+			</div>
 
-	<div class="flex-1 overflow-y-auto px-4">
-		<div class="mb-2 flex items-center justify-between">
-			<h2 class="text-sm font-semibold text-slate-500">내 그룹</h2>
-			<Button variant="ghost" size="icon" class="h-7 w-7">
-				<PlusCircle class="h-4 w-4 text-slate-500" />
-			</Button>
 		</div>
-		<div class="space-y-1">
-			{#each mockGroups as group (group.id)}
+
+		<!-- Navigation Menu -->
+		<nav class="flex-1 p-6 space-y-2" aria-label="Main menu">
+			<div class="font-mono text-xs text-muted-foreground mb-4 uppercase tracking-widest">
+				// NAVIGATION
+			</div>
+
+			{#each navItems as item (item.href)}
 				<a
-					href="/groups/{group.id}"
-					class="flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors"
-					class:bg-slate-100={$page.url.pathname.startsWith(`/groups/${group.id}`)}
-					class:text-slate-900={$page.url.pathname.startsWith(`/groups/${group.id}`)}
-					class:text-slate-600={!$page.url.pathname.startsWith(`/groups/${group.id}`)}
-					class:hover:bg-slate-100={true}
+					href={item.href}
+					class="block group relative"
+					class:bg-foreground={isActiveRoute(item.href)}
+					class:text-background={isActiveRoute(item.href)}
+					aria-current={isActiveRoute(item.href) ? 'page' : undefined}
 				>
-					<span class="truncate font-medium">{group.name}</span>
+					<div class="card-brutal p-4 text-left">
+						<div class="font-mono text-sm font-bold">
+							<div class="uppercase tracking-wider">{item.label}</div>
+							<div class="text-xs text-muted-foreground mt-1">// {item.desc}</div>
+						</div>
+
+						{#if isActiveRoute(item.href)}
+							<div class="absolute right-2 top-1/2 -translate-y-1/2 font-mono text-xs">
+								[●]
+							</div>
+						{/if}
+					</div>
 				</a>
 			{/each}
-		</div>
-	</div>
+		</nav>
 
+		<!-- Terminal-like Status Section -->
+		<div class="border-t-2 border-foreground bg-muted p-6">
+			<!-- User Profile -->
+			<div class="font-mono text-xs border-t border-foreground pt-3">
+				<div class="text-muted-foreground mb-2">// USER PROFILE</div>
+				<div class="flex items-start justify-between">
+					<div class="flex-1">
+						<div class="font-bold uppercase text-foreground">
+							{$authStore.user?.name ?? 'ANONYMOUS'}
+						</div>
+						<div class="text-xs text-muted-foreground truncate">
+							{$authStore.user?.email ?? 'guest@system.local'}
+						</div>
+					</div>
+				</div>
 
-	<div class="mt-auto border-t p-4">
-		<div class="flex items-center gap-4">
-			<div
-				class="flex h-10 w-10 items-center justify-center rounded-full bg-slate-200 font-bold text-slate-600"
-			>
-				{$authStore.user?.name?.charAt(0) ?? 'G'}
+				<!-- Logout Button -->
+				<button
+					onclick={handleLogout}
+					class="mt-3 w-full btn-ghost-brutal text-xs"
+					aria-label="Sign out"
+				>
+					LOGOUT
+				</button>
 			</div>
-			<div class="flex-1">
-				<p class="text-sm font-semibold text-slate-800">{$authStore.user?.name ?? 'Guest'}</p>
-				<p class="text-xs text-slate-500">{$authStore.user?.email ?? 'Welcome!'}</p>
-			</div>
-			<Button on:click={handleLogout} variant="ghost" size="icon">
-				<LogOut class="h-5 w-5 text-slate-600" />
-			</Button>
 		</div>
-	</div>
-</aside>
+	</aside>
+{/if}
+
+<style>
+    /* Custom animations for brutal style */
+    a {
+        transition: all 0.1s ease-out;
+    }
+
+    a:hover {
+        transform: translate(-1px, -1px);
+    }
+
+    a:active {
+        transform: translate(1px, 1px);
+    }
+
+    pre {
+        font-family: 'JetBrains Mono', 'SF Mono', monospace;
+        font-size: inherit;
+        line-height: inherit;
+    }
+</style>

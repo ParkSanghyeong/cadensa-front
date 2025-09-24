@@ -1,0 +1,7 @@
+1. Header, Anonymous mode 만들기. (가벼운 사용을 최우선으로.)
+
+2. Notifications, type 추가하고. badge로 개수 표시하기.
+
+3. 통합 theme 재구성하기
+
+4. 캘린더, 4일 모드, 주, 달 모드 구현하기.

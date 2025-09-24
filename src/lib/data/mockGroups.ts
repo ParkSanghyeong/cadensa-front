@@ -4,29 +4,52 @@ export type Group = {
 	name: string;
 	description: string;
 	memberCount: number;
-	lastActivity: string;
+	tags: string[];
+	members: { id: string; avatarUrl?: string; name: string }[];
 };
 
 export const mockGroups: Group[] = [
 	{
-		id: 'project-a',
-		name: '사이드 프로젝트 A팀',
-		description: '일정 관리 서비스 개발을 위한 팀입니다.',
+		id: 'g1',
+		name: 'PROJECT_ALPHA',
+		description: '차세대 대시보드 UI/UX 기획 및 개발 프로젝트입니다. 함께 멋진 결과물을 만들어봐요.',
 		memberCount: 5,
-		lastActivity: '어제',
+		tags: ['Development', 'UI/UX'],
+		members: [
+			{ id: 'm1', name: 'User 1' },
+			{ id: 'm2', name: 'User 2' },
+			{ id: 'm3', name: 'User 3' },
+			{ id: 'm4', name: 'User 4' },
+			{ id: 'm5', name: 'User 5' }
+		]
 	},
 	{
-		id: 'study-group',
-		name: 'CS 스터디 그룹',
-		description: '매주 CS 관련 주제를 정해 발표하고 토론합니다.',
+		id: 'g2',
+		name: 'CS 스터디',
+		description: '알고리즘, 자료구조, 운영체제 등 CS 핵심 지식을 함께 공부하고 공유하는 스터디입니다.',
 		memberCount: 8,
-		lastActivity: '3일 전',
+		tags: ['CS', 'Study', 'Algorithm'],
+		members: [
+			{ id: 'm1', name: 'User 1' },
+			{ id: 'm2', name: 'User 2' },
+			{ id: 'm3', name: 'User 3' },
+			{ id: 'm4', name: 'User 4' },
+			{ id: 'm5', name: 'User 5' },
+			{ id: 'm6', name: 'User 6' },
+			{ id: 'm7', name: 'User 7' },
+			{ id: 'm8', name: 'User 8' },
+		]
 	},
 	{
-		id: 'hobby-club',
-		name: '영화 감상 동호회',
-		description: '매달 2회, 함께 영화를 보고 이야기를 나눕니다.',
+		id: 'g3',
+		name: '영화 감상 모임',
+		description: '매주 토요일 밤, 함께 영화를 보고 자유롭게 이야기를 나누는 소셜 클럽입니다.',
 		memberCount: 12,
-		lastActivity: '1주 전',
-	},
+		tags: ['Hobby', 'Movie', 'Social'],
+		members: [
+			{ id: 'm1', name: 'User 1' },
+			{ id: 'm2', name: 'User 2' },
+			{ id: 'm3', name: 'User 3' }
+		]
+	}
 ];

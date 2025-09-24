@@ -1,9 +1,45 @@
 @import "tailwindcss";
-
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
 
+@theme {
+  --color-background: oklch(0.98 0.005 285);
+  --color-foreground: oklch(0.05 0.01 285);
+  --color-card: oklch(0.96 0.01 285);
+  --color-card-foreground: oklch(0.08 0.015 285);
+  --color-primary: oklch(0.12 0.02 285);
+  --color-primary-foreground: oklch(0.98 0.005 285);
+  --color-secondary: oklch(0.92 0.01 285);
+  --color-secondary-foreground: oklch(0.15 0.02 285);
+  --color-muted: oklch(0.94 0.01 285);
+  --color-muted-foreground: oklch(0.35 0.015 285);
+  --color-accent: oklch(0.08 0.015 45);
+  --color-accent-foreground: oklch(0.98 0.005 285);
+  --color-border: oklch(0.08 0.015 285);
+  --color-input: oklch(0.94 0.01 285);
+  --color-ring: oklch(0.08 0.015 285);
+  --color-destructive: oklch(0.45 0.15 15);
+  --color-success: oklch(0.25 0.08 150);
+  --color-warning: oklch(0.35 0.12 55);
+
+  /* 4. Fonts */
+  --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
+  --font-display: 'Inter', system-ui, sans-serif;
+
+  /* 5. Shadows */
+  --shadow-brutal: 4px 4px 0px var(--color-foreground);
+  --shadow-brutal-lg: 8px 8px 0px var(--color-foreground);
+  --shadow-brutal-xl: 12px 12px 0px var(--color-foreground);
+  --shadow-inset: inset 2px 2px 0px var(--color-foreground);
+
+  /* 6. Animations */
+  --animate-slide-brutal: slide-brutal 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --animate-fade-brutal: fade-brutal 0.2s steps(4, end);
+  --animate-blink: blink 1s infinite;
+}
+
+/*
 :root {
   --radius: 0.625rem;
   --background: oklch(1 0 0);
@@ -119,3 +155,5 @@
     @apply bg-slate-50 font-sans text-slate-900 antialiased;
   }
 }
+
+ */

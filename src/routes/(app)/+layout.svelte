@@ -1,11 +1,12 @@
 <script lang="ts">
-	import Header from "$lib/components/layout/Header.svelte";
 	import "../../app.css";
+	import Header from '$lib/components/layout/Header.svelte';
 </script>
 
-<div class="min-h-screen bg-slate-50 font-sans text-slate-900 antialiased">
+<div class="bg-slate-50">
 	<Header />
-	<main class="container mx-auto px-4 py-8">
+
+	<main class="flex-1">
 		<slot />
 	</main>
 </div>
